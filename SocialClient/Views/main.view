@@ -1,0 +1,49 @@
+{
+  BackgroundColour="green",
+  Children={
+    {
+      Type="MenuView",
+      Name="MainMenuView",
+      X=1,
+      Y=1,
+      Width="100%",
+      Height="100%",
+      ShowMenu=true,
+      MenuAnimationDuration=0.3,
+      MenuWidth=20,
+      HeaderText="Startup Screen",
+      ActiveContent="StartupScreen",
+      Headers={
+        ["StartupScreen"]="Startup Screen",
+        ["MainScreen"]="Main - Social Client",
+      },
+      MenuItems={
+        {
+          Type="Label",
+          Name="MenuHeader",
+          TextColour="white",
+          Text="Main Menu"
+        },
+        {
+          Type="Separator",
+        },
+        {
+          Type="Button",
+          Name="StartupScreenButton",
+          Switch="StartupScreen",
+          Text="Startup Screen"
+        },
+        {
+          Type="Button",
+          Name="MainScreenButton",
+          Switch="MainScreen",
+          Text="Main"
+        },
+      },
+      ContentViews={
+        "startup_screen",
+        "main_screen"
+      }
+    }
+  }
+}

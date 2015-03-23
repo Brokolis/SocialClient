@@ -1,0 +1,34 @@
+{
+  Type="View",
+  Name="StartupScreen",
+  BackgroundColour="white",
+  Children={
+    {
+      Type="ScrollView",
+      Name="NotesView",
+      X=2,
+      Y=2,
+      Width="100%,-2",
+      Height="100%,-4",
+      BackgroundColour="lightGray",
+      Children={
+        {
+          Type="Label",
+          Name="NotesLabel",
+          X=1,
+          Y=1,
+          Width="100%",
+          TextColour="gray",
+          Text="This is an early version of a GUI interface for DannySMc's social API 'SocialNet'. This program was written using Oeed's Bedrock framework (build 548).\n\nMade by MKlegoman357"
+        },
+      }
+    },
+    {
+      Type="Button",
+      Name="GoToMainButton",
+      X=2,
+      Y="100%,-1",
+      Text="Go to Main"
+    },
+}
+}
