@@ -27,8 +27,6 @@ onView["startup_screen"] = function (menuView, contentView)
   end
 end
 
-MenuView.test = true
-
 function MenuView.OnContentLoad (menuView, contentView, name)
   if onView[name] then
     onView[name](menuView, contentView)

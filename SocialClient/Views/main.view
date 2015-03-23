@@ -1,5 +1,5 @@
 {
-  BackgroundColour="green",
+  BackgroundColour="gray",
   Children={
     {
       Type="MenuView",
@@ -8,7 +8,7 @@
       Y=1,
       Width="100%",
       Height="100%",
-      ShowMenu=true,
+      ShowMenu=false,
       MenuAnimationDuration=0.3,
       MenuWidth=20,
       HeaderText="Startup Screen",
@@ -39,10 +39,40 @@
           Switch="MainScreen",
           Text="Main"
         },
+        {
+          Type="Button",
+          Name="MainScreenButton",
+          Switch="AppStoreScreen",
+          Text="App Store"
+        },
+        {
+          Type="Button",
+          Name="MainScreenButton",
+          Switch="TweetsScreen",
+          Text="Tweets"
+        },
+        {
+          Type="Button",
+          Name="MainScreenButton",
+          Switch="MessagesScreen",
+          Text="Messages"
+        },
+        {
+          Type="Button",
+          Name="MainScreenButton",
+          Switch="AccountScreen",
+          Text="Account"
+        },
+        {
+          Type="Button",
+          Name="MainScreenButton",
+          Switch="AboutScreen",
+          Text="About"
+        },
       },
       ContentViews={
         "startup_screen",
-        "main_screen"
+        "main_screen",
       }
     }
   }

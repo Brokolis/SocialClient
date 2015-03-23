@@ -15,6 +15,20 @@ MenuItems = nil
 
 ActiveContent = nil
 
+local function deepTableCopy(tt, t)
+  --tt > table to copy to
+  --t > table to copy from
+
+  for k, v in pairs(t) do
+    tt[k] = v
+  end
+
+  local mt = getmetatable(t)
+  if type(mt) == "table" and type(mt.__index) == "table" then
+    deepTableCopy(tt, mt.__index)
+  end
+end
+
 OnInitialise = function (self)
   local header = {
     Type = "View",
@@ -65,7 +79,7 @@ OnInitialise = function (self)
     Y = 4,
     Width = "100%",
     Height = "100%,-3",
-    BackgroundColour = "green"
+    BackgroundColour = "white"
   }
 
   local menu = {
@@ -76,6 +90,16 @@ OnInitialise = function (self)
     Width = self.MenuWidth,
     Height = "100%",
     BackgroundColour = "gray",
+    Children = {
+      {
+        Type = "ScrollView", -- This is bugged and doesn't work at all. Note: make a working ScrollView - Name: MenuScrollView
+        Name = "MenuScrollView",
+        X = 1,
+        Y = 1,
+        Width = "100%",
+        Height = "100%",
+      }
+    },
   }
 
   self.Header = self.Bedrock:ObjectFromFile(header, self)
@@ -89,6 +113,8 @@ OnInitialise = function (self)
       self.ContentViews[i] = nil
       self:LoadContent(contentView)
     end
+  else
+    self.ContentViews = {}
   end
 
   if self.ActiveContent then
@@ -96,10 +122,12 @@ OnInitialise = function (self)
   end
 
   if type(self.MenuItems) == "table" then
+    local offset = 0
+
     for i, item in ipairs(self.MenuItems) do
       local newItem = {
         X = 2,
-        Y = i * 2,
+        Y = i * 2 + offset,
         Width = "100%,-2",
         Height = 1,
         BackgroundColour = colors.transparent,
@@ -108,18 +136,25 @@ OnInitialise = function (self)
         Align = "Left"
       }
 
-      for k, v in pairs(item) do
-        newItem[k] = v
+      for k, v in pairs(newItem) do
+        if item[k] == nil then
+          item[k] = v
+        end
       end
+      newItem = item
 
-      self.Menu:AddObject(newItem)
+      newItem = self.Menu:GetObject("MenuScrollView"):AddObject(newItem)
 
-      if item.Switch and newItem.Name then
-        self.Menu:GetObject(newItem.Name).OnClick = function (_, event, b, x, y)
+      offset = offset + newItem.Height - 1
+
+      if item.Switch then
+        newItem.OnClick = function (_, event, b, x, y)
           self:SwitchContent(item.Switch, item.SwitchHeader)
         end
       end
     end
+  else
+    self.MenuItems = {}
   end
 
   self.Header:GetObject("MenuButton").OnClick = function (_, event, b, x, y)
@@ -234,9 +269,12 @@ function LoadContent (self, contentView)
     Z = 1
   }
 
-  for k, v in pairs(contentView) do
-    newContentView[k] = v
+  for k, v in pairs(newContentView) do
+    if contentView[k] == nil then
+      contentView[k] = v
+    end
   end
+  newContentView = contentView
 
   newContentView = self.Bedrock:ObjectFromFile(newContentView, self.Content)
   self.ContentViews[#self.ContentViews + 1] = newContentView
