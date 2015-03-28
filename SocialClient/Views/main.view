@@ -69,6 +69,12 @@
           Switch="AboutScreen",
           Text="About"
         },
+        {
+          Type="Button",
+          Name="MainScreenButton",
+          Switch="ExitScreen",
+          Text="Exit"
+        },
       },
       ContentViews={
         "startup_screen",

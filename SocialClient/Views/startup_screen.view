@@ -4,7 +4,7 @@
   BackgroundColour="white",
   Children={
     {
-      Type="ScrollView",
+      Type="BetterScrollView",
       Name="NotesView",
       X=2,
       Y=2,
@@ -17,7 +17,7 @@
           Name="NotesLabel",
           X=1,
           Y=1,
-          Width="100%",
+          Width="100%,-1",
           TextColour="gray",
           Text="This is an early version of a GUI interface for DannySMc's social API 'SocialNet'. This program was written using Oeed's Bedrock framework (build 548).\n\nMade by MKlegoman357"
         },

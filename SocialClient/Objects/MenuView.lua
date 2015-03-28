@@ -15,20 +15,6 @@ MenuItems = nil
 
 ActiveContent = nil
 
-local function deepTableCopy(tt, t)
-  --tt > table to copy to
-  --t > table to copy from
-
-  for k, v in pairs(t) do
-    tt[k] = v
-  end
-
-  local mt = getmetatable(t)
-  if type(mt) == "table" and type(mt.__index) == "table" then
-    deepTableCopy(tt, mt.__index)
-  end
-end
-
 OnInitialise = function (self)
   local header = {
     Type = "View",
@@ -92,12 +78,14 @@ OnInitialise = function (self)
     BackgroundColour = "gray",
     Children = {
       {
-        Type = "ScrollView", -- This is bugged and doesn't work at all. Note: make a working ScrollView - Name: MenuScrollView
+        Type = "BetterScrollView",
         Name = "MenuScrollView",
         X = 1,
         Y = 1,
         Width = "100%",
         Height = "100%",
+        ScrollBarColour = "lightGray",
+        ScrollBarBackgroundColour = "gray"
       }
     },
   }
@@ -152,6 +140,12 @@ OnInitialise = function (self)
           self:SwitchContent(item.Switch, item.SwitchHeader)
         end
       end
+    end
+
+    local scrollView = self.Menu:GetObject("MenuScrollView")
+
+    if scrollView.Type == "BetterScrollView" then
+      scrollView:UpdateScroll()
     end
   else
     self.MenuItems = {}
