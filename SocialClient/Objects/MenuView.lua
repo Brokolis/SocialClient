@@ -120,6 +120,7 @@ OnInitialise = function (self)
         Height = 1,
         BackgroundColour = colors.transparent,
         TextColour = colors.lightGray,
+        DisabledTextColour = colors.black,
         Colour = colors.lightGray,
         Align = "Left"
       }
@@ -171,8 +172,8 @@ OnClick = function (self, event, b, x, y)
   if self.ShowMenu then
     self:DoClick(self.Menu, event, b, x, y)
 
-    if self:CheckClick(self.Content, x, y) then
-      self:ToggleMenu()
+    if event == "mouse_click" and self:CheckClick(self.Content, x, y) then
+      self:ToggleMenu(false)
     end
   else
     self:DoClick(self.Content, event, b, x, y)

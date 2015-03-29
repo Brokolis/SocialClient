@@ -25,7 +25,7 @@ end
 OnClick = function (self, event, b, x, y)
   local dim = self:GetScrollBarDimesions()
 
-  if y >= dim.Y and y <= dim.Y + dim.Height - 1 then
+  if y >= dim.Y and y <= dim.Y + dim.Height then
     self.ClickY = y
     self.IsDragging = true
   end

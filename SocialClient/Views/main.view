@@ -16,8 +16,30 @@
       Headers={
         ["StartupScreen"]="Startup Screen",
         ["MainScreen"]="Main - Social Client",
+        ["AppStoreScreen"]="Appstore",
+        ["PostsScreen"]="Posts",
+        ["GlobalChatScreen"]="Global Chat",
+        ["GroupChatScreen"]="Group Chat",
+        ["PrivateChatScreen"]="Private Chat",
+        ["AccountScreen"]="Social Account",
+        ["SettingsScreen"]="App Settings",
+        ["AboutScreen"]="About Social Client",
       },
       MenuItems={
+        {
+          Type="Label",
+          Name="LoggedInAsHeader",
+          TextColour="white",
+          Text="Logged in as:"
+        },
+        {
+          Type="Label",
+          Name="LoggedInAs",
+          Text="not logged in"
+        },
+        {
+          Type="Separator",
+        },
         {
           Type="Label",
           Name="MenuHeader",
@@ -41,40 +63,60 @@
         },
         {
           Type="Button",
-          Name="MainScreenButton",
+          Name="AppStoreScreenButton",
           Switch="AppStoreScreen",
-          Text="App Store"
+          Text="App Store",
+          Enabled=false
         },
         {
           Type="Button",
-          Name="MainScreenButton",
-          Switch="TweetsScreen",
-          Text="Tweets"
+          Name="PostsScreenButton",
+          Switch="PostsScreen",
+          Text="Posts",
+          Enabled=false
         },
         {
           Type="Button",
-          Name="MainScreenButton",
-          Switch="MessagesScreen",
-          Text="Messages"
+          Name="GlobalChatScreenButton",
+          Switch="GlobalChatScreen",
+          Text="Global Chat",
+          Enabled=false
         },
         {
           Type="Button",
-          Name="MainScreenButton",
+          Name="GroupChatScreenButton",
+          Switch="GroupChatScreen",
+          Text="Group Chat",
+          Enabled=false
+        },
+        {
+          Type="Button",
+          Name="PrivateChatScreenButton",
+          Switch="PrivateChatScreen",
+          Text="Private Chat",
+          Enabled=false
+        },
+        {
+          Type="Button",
+          Name="AccountScreenButton",
           Switch="AccountScreen",
-          Text="Account"
+          Text="Account",
+          Enabled=false
         },
         {
           Type="Button",
-          Name="MainScreenButton",
+          Name="SettingsScreenButton",
+          Switch="SettingsScreen",
+          Text="Settings",
+          Enabled=false
+        },
+        {
+          Type="Button",
+          Name="AboutScreenButton",
           Switch="AboutScreen",
-          Text="About"
-        },
-        {
-          Type="Button",
-          Name="MainScreenButton",
-          Switch="ExitScreen",
-          Text="Exit"
-        },
+          Text="About",
+          Enabled=false
+        }
       },
       ContentViews={
         "startup_screen",

@@ -130,4 +130,30 @@ utils.Bedrock.RestoreOldDrawing = function ()
   end
 end
 
+utils.Bedrock.OverrideBedrockButtonDefaultClickDetection = function ()
+  utils.Bedrock.oldButtonClick = Button.Click
+
+  Button.Click = function (self, event, side, x, y)
+    if self.Visible and not self.IgnoreClick and self.Enabled and event ~= 'mouse_scroll' then
+      if self.OnClick then
+        if self.Momentary then
+          self.Toggle = true
+          self.Bedrock:StartTimer(function()self.Toggle = false end,0.25)
+        elseif self.Toggle ~= nil then
+          self.Toggle = not self.Toggle
+        end
+
+        if event ~= "mouse_drag" then
+          self:OnClick(event, side, x, y, self.Toggle)
+        end
+      else
+        self.Toggle = not self.Toggle
+      end
+      return true
+    else
+      return false
+    end
+  end
+end
+
 return utils
