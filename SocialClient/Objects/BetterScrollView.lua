@@ -75,11 +75,3 @@ function UpdateScroll (self)
     self:RemoveObject(self.ScrollBarName)
   end
 end
-
-function getDebugLabel (self)
-  return self.Bedrock:GetObject("MainMenuView").Header:GetObject("HeaderLabel")
-end
-
-function debug (self, ...)
-  self:getDebugLabel().Text = textutils.serialize({...}):gsub("\n", ""):gsub("%s+", "")
-end

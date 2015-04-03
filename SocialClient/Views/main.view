@@ -73,7 +73,7 @@
           Name="PostsScreenButton",
           Switch="PostsScreen",
           Text="Posts",
-          Enabled=false
+          Enabled=true
         },
         {
           Type="Button",
@@ -121,6 +121,7 @@
       ContentViews={
         "startup_screen",
         "main_screen",
+        "posts_screen"
       }
     }
   }

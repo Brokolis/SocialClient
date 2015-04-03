@@ -7,8 +7,10 @@
 
 local SocialNet = {}
 
+-- The base URL for CC Systems
 SocialNet.baseUrl = "https://ccsystems.dannysmc.com/ccsystems.php"
 
+-- Holds all unfinished http requests
 SocialNet.requests = {}
 
 --[[
@@ -25,8 +27,10 @@ SocialNet.requests = {}
       * done (url) - ran after both 'http_success' and 'http_failure' events, right *after* 'success' and 'failure'
         callbacks have been ran.
 --]]
-SocialNet.Request = function (parameters, headers, unserializer)
-  local url = SocialNet.baseUrl
+SocialNet.Request = function (parameters, headers, unserializer, url)
+  parameters = parameters or {}
+  url = url or SocialNet.baseUrl
+
   local postParams = ""
 
   local isFirst = true
@@ -48,6 +52,11 @@ SocialNet.Request = function (parameters, headers, unserializer)
   return request
 end
 
+--[[
+    Takes in raw data and tries to unserialize it with textutils.unserialize. Returns a table with two keys: 'ok' and 'data' or 'error'.
+    If unserializes the raw data successfully then 'ok' is set to true and 'data' is set to whatever the unserialized raw data
+    is. Otherwise sets 'ok' to false and sets 'error' to the raw data.
+--]]
 SocialNet.BasicUnserialize = function (rawData)
   local data = textutils.unserialize(rawData)
 
@@ -196,6 +205,110 @@ SocialNet.Store.ListAllApps = function ()
   return true, SocialNet.Request(parameters, nil, unserialize)
 end
 
+--[[
+    Takes the username, the sha256 hash of the password, the new app's name, description, version, file contents, category and status ('public' or 'private')
+--]]
+SocialNet.Store.UploadApp = function (username, password, appName, appDescription, appVersion, appFile, appCategory, appStatus)
+  local parameters = {
+    ccsys = "appstore",
+    cccmd = "upload",
+    username = username,
+    password = password,
+    filename = appName,
+    filedesc = appDescription,
+    filevers = appVersion,
+    filedata = appFile,
+    filecate = appCategory,
+    filestat = appStatus
+  }
+
+  return true, SocialNet.Request(patameters, nil, SocialNet.BasicUnserialize)
+end
+
+--[[
+    Takes the username, the sha256 hash of the password, the app's name, new verion, new file contents and new status
+--]]
+SocialNet.Store.UpdateApp = function (username, password, appName, appVersion, appFile, appStatus)
+  local parameters = {
+    ccsys = "appstore",
+    cccmd = "update",
+    username = username,
+    password = password,
+    filename = appName,
+    filevers = appVersion,
+    filedata = appFile,
+    filestat = appStatus
+  }
+
+  return true, SocialNet.Request(parameters, nil, SocialNet.BasicUnserialize)
+end
+
+--[[
+    Takes the username, the sha256 hash of the password, the app's name, new description, new version and new status
+--]]
+SocialNet.Store.EditApp = function (username, password, appName, appDescription, appVersion, appStatus)
+  local parameters = {
+    ccsys = "appstore",
+    cccmd = "edit",
+    username = username,
+    password = password,
+    filename = appName,
+    filedesc = appDescription,
+    filevers = appVersion,
+    filestat = appStatus
+  }
+
+  return true, SocialNet.Request(parameters, nil, SocialNet.BasicUnserialize)
+end
+
+--[[
+    Takes the app's you want to get comments of ID
+--]]
+SocialNet.Store.GetAppComments = function (appID)
+  local parameters = {
+    ccsys = "appstore",
+    cccmd = "viewcomments",
+    appid = appID
+  }
+
+  -- TODO: make a custom unserializer
+  local function unserialize (rawData)
+    local data = SocialNet.BasicUnserialize(rawData)
+
+    if data.ok then
+      local comments = {}
+
+      for i, comment in ipairs(data.data) do
+        comments[#comments + 1] = {
+
+        }
+      end
+
+      data.data = comments
+    end
+
+    return data
+  end
+
+  return true, SocialNet.Request(parameters, nil, SocialNet.BasicUnserialize)
+end
+
+--[[
+    Takes the username, the sha256 hash of the password, the app's ID, and the new comment
+--]]
+SocialNet.Store.NewAppComment = function (username, password, appID, comment)
+  local parameters = {
+    ccsys = "appstore",
+    cccmd = "addcomments",
+    username = username,
+    password = password,
+    appid = appID,
+    comment = comment
+  }
+
+  return true, SocialNet.Request(parameters, nil, SocialNet.BasicUnserialize)
+end
+
 -- Post managment functions
 SocialNet.Posts = {}
 
@@ -269,6 +382,10 @@ SocialNet.Posts.GetAllPosts = function (username, password)
           DatePosted = post[6]
         }
       end
+
+      table.sort(posts, function (a, b)
+        return tonumber(a.ID) > tonumber(b.ID)
+      end)
 
       data.data = posts
     end

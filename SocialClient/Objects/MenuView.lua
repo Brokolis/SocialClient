@@ -31,8 +31,8 @@ OnInitialise = function (self)
         X = 2,
         Y = 2,
         Width = 3,
-        BackgroundColour = "lightGray",
-        TextColour = "gray",
+        BackgroundColour = colors.lightGray,
+        TextColour = colors.gray,
         Text = " = "
       },
       {
@@ -42,8 +42,8 @@ OnInitialise = function (self)
         Y = 2,
         Width = "100%,-10",
         Height = 2,
-        TextColour = "white",
-        Text = self.HeaderText or "Header"
+        TextColour = colors.white,
+        Text = self.HeaderText
       },
       {
         X = "100%,-4",
@@ -52,8 +52,8 @@ OnInitialise = function (self)
         Name = "ExitButton",
         Type = "Button",
         Text = " x ",
-        BackgroundColour = "lightGray",
-        TextColour = "gray"
+        BackgroundColour = colors.lightGray,
+        TextColour = colors.gray
       }
     }
   }
@@ -65,7 +65,7 @@ OnInitialise = function (self)
     Y = 4,
     Width = "100%",
     Height = "100%,-3",
-    BackgroundColour = "white"
+    BackgroundColour = colors.white
   }
 
   local menu = {
@@ -75,7 +75,7 @@ OnInitialise = function (self)
     Y = 1,
     Width = self.MenuWidth,
     Height = "100%",
-    BackgroundColour = "gray",
+    BackgroundColour = colors.gray,
     Children = {
       {
         Type = "BetterScrollView",
@@ -84,8 +84,8 @@ OnInitialise = function (self)
         Y = 1,
         Width = "100%",
         Height = "100%",
-        ScrollBarColour = "lightGray",
-        ScrollBarBackgroundColour = "gray"
+        ScrollBarColour = colors.lightGray,
+        ScrollBarBackgroundColour = colors.gray
       }
     },
   }
@@ -97,8 +97,15 @@ OnInitialise = function (self)
   self.Headers = self.Headers or {}
 
   if type(self.ContentViews) == "table" then
-    for i, contentView in ipairs(self.ContentViews) do
-      self.ContentViews[i] = nil
+    local temp = {}
+
+    for k, v in pairs(self.ContentViews) do
+      temp[k] = v
+    end
+
+    self.ContentViews = {}
+
+    for i, contentView in ipairs(temp) do
       self:LoadContent(contentView)
     end
   else
@@ -240,13 +247,13 @@ function LoadContent (self, contentView)
   local name
   if type(contentView) == "string" then
     name = contentView
-
+    
     local file = fs.open(self.Bedrock.ViewPath .. contentView .. ".view", "r")
 
     if not file then
       return false
     end
-
+    
     contentView = textutils.unserialize(file.readAll())
 
     file.close()

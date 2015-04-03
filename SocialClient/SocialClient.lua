@@ -1,6 +1,11 @@
 local programDir = fs.getDir(shell.getRunningProgram()) .. "/"
 
 local utils = dofile(programDir .. "utils.lua")
+local SocialNet = dofile(programDir .. "SocialNet.lua")
+
+-- add the SocialNet API to the global table for use in other files
+_G.SocialNet = SocialNet
+
 utils.loadAPI(programDir .. "Bedrock.lua", "Bedrock")
 
 Bedrock.BasePath = programDir
@@ -13,6 +18,8 @@ utils.Bedrock.SetProgram(program)
 program.Drawing = Drawing
 utils.Bedrock.BypassBedrockSlowDrawing()
 utils.Bedrock.OverrideBedrockButtonDefaultClickDetection()
+
+SC.SetProgram(program)
 
 local onView = {}
 
@@ -27,6 +34,16 @@ end
 onView["startup_screen"] = function (menuView, contentView)
   contentView:GetObject("GoToMainButton").OnClick = function (self, event, b, x, y)
     menuView:SwitchContent("MainScreen")
+  end
+end
+
+onView["posts_screen"] = function (menuView, contentView)
+  contentView:GetObject("ShowPostsButton").OnClick = function (self, event, b, x, y)
+    SC.Posts.ShowPosts(contentView, "post")
+  end
+
+  contentView:GetObject("ShowTweetsButton").OnClick = function (self, event, b, x, y)
+    SC.Posts.ShowPosts(contentView, "tweet")
   end
 end
 
@@ -48,7 +65,14 @@ end
 
 local oldTerm = term.current()
 local ok, err = pcall(program.Run, program, function()
-  
+  Debug.ClearLog()
+
+  program:RegisterEvent("http_success", function (self, ...)
+    SocialNet.EventHandler(...)
+  end)
+  program:RegisterEvent("http_failure", function (self, ...)
+    SocialNet.EventHandler(...)
+  end)
 end)
 
 term.redirect(oldTerm)
