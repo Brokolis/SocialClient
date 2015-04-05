@@ -47,9 +47,77 @@ onView["posts_screen"] = function (menuView, contentView)
   end
 end
 
+onView["login_screen"] = function (menuView, contentView)
+  local loginView = contentView:GetObject("LoginView")
+  local logoutView = contentView:GetObject("LogoutView")
+  local loggingIn = contentView:GetObject("LoggingIn")
+
+  loginView:GetObject("LoginButton").OnClick = function (self, event, b, x, y)
+    local username = loginView:GetObject("UsernameTextBox").Text
+    local password = loginView:GetObject("PasswordTextBox").Text
+
+    program:SetActiveObject()
+    loggingIn.Visible = true
+    loginView.Visible = false
+
+    Account.Login(username, password, function ()
+      menuView.Menu:GetObject("LoggedInAs").Text = Account.Username
+      loginView:GetObject("UsernameTextBox").Text = ""
+
+      logoutView:GetObject("Username").Text = Account.Username
+
+      loginView.Visible = false
+      logoutView.Visible = true
+    end, function ()
+      program:DisplayAlertWindow("Failed to log in", "The username or password is incorrect.", {"OK"})
+
+      loginView.Visible = true
+      logoutView.Visible = false
+    end, function ()
+      loginView:GetObject("PasswordTextBox").Text = ""
+
+      loggingIn.Visible = false
+    end)
+  end
+
+  logoutView:GetObject("LogoutButton").OnClick = function (self, event, b, x, y)
+    Account.Logout()
+
+    menuView.Menu:GetObject("LoggedInAs").Text = "not logged in"
+    logoutView:GetObject("Username").Text = "not logged in"
+
+    loginView.Visible = true
+    logoutView.Visible = false
+  end
+end
+
+local onSwitch = {}
+
+onSwitch["PostsScreen"] = function (menuView, contentView)
+  if SC.Posts.CheckLogin(contentView) then
+    SC.Posts.ShowPosts(contentView, "post")
+  end
+end
+
+onSwitch["LoginScreen"] = function (menuView, contentView)
+  if Account.IsLoggedIn() then
+    contentView:GetObject("LoginView").Visible = false
+    contentView:GetObject("LogoutView").Visible = true
+  else
+    contentView:GetObject("LoginView").Visible = true
+    contentView:GetObject("LogoutView").Visible = false
+  end
+end
+
 function MenuView.OnContentLoad (menuView, contentView, name)
   if onView[name] then
     onView[name](menuView, contentView)
+  end
+end
+
+function MenuView.OnSwitch (menuView, contentView)
+  if onSwitch[contentView.Name] then
+    onSwitch[contentView.Name](menuView, contentView)
   end
 end
 
@@ -74,6 +142,9 @@ local ok, err = pcall(program.Run, program, function()
     SocialNet.EventHandler(...)
   end)
 end)
+
+Account.CleanUp()
+_G.Account = nil
 
 term.redirect(oldTerm)
 utils.clear()

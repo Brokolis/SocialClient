@@ -12,8 +12,10 @@
       MenuAnimationDuration=0.3,
       MenuWidth=20,
       HeaderText="Startup Screen",
+      HeaderBackgroundColour="gray",
       ActiveContent="StartupScreen",
       Headers={
+        ["LoginScreen"]="Login",
         ["StartupScreen"]="Startup Screen",
         ["MainScreen"]="Main - Social Client",
         ["AppStoreScreen"]="Appstore",
@@ -29,12 +31,14 @@
         {
           Type="Label",
           Name="LoggedInAsHeader",
+          Switch="LoginScreen",
           TextColour="white",
           Text="Logged in as:"
         },
         {
-          Type="Label",
+          Type="Button",
           Name="LoggedInAs",
+          Switch="LoginScreen",
           Text="not logged in"
         },
         {
@@ -119,9 +123,10 @@
         }
       },
       ContentViews={
+        "login_screen",
         "startup_screen",
         "main_screen",
-        "posts_screen"
+        "posts_screen",
       }
     }
   }

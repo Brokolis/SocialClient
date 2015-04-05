@@ -8,7 +8,7 @@
       Name="ShowPostsButton",
       X=3,
       Y=2,
-      Width="50%,-3",
+      Width="50%,-4",
       Text="Posts"
     },
     {
@@ -16,7 +16,7 @@
       Name="ShowTweetsButton",
       X="50%,2",
       Y=2,
-      Width="50%,-3",
+      Width="50%,-4",
       Text="Tweets"
     },
     {
@@ -27,7 +27,20 @@
       Width="100%",
       Align="Center",
       TextColour="lightGray",
-      Text="Loading..."
+      Text="Loading...",
+      Visible=false
+    },
+    {
+      Type="Label",
+      Name="NeedLogin",
+      X=2,
+      Y=4,
+      Width="100%,-2",
+      Height="100%,-1",
+      BackgroundColour="white",
+      TextColour="lightGray",
+      Text="You need to be logged in to view and post posts and tweets.",
+      Visible=true
     },
     {
       Type="BetterScrollView",
@@ -36,7 +49,8 @@
       Y=4,
       Width="100%",
       Height="100%,-3",
-      BackgroundColour="white"
+      BackgroundColour="white",
+      Visible=false
     },
   }
 }

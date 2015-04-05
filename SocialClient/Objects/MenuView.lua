@@ -9,6 +9,8 @@ MenuAnimationDuration = 1
 MenuWidth = 15
 HeaderText = "Header"
 
+HeaderBackgroundColour = colors.gray
+
 Headers = nil
 ContentViews = nil
 MenuItems = nil
@@ -23,7 +25,7 @@ OnInitialise = function (self)
     Y = 1,
     Width = "100%",
     Height = 3,
-    BackgroundColour = colors.gray,
+    BackgroundColour = self.HeaderBackgroundColour,
     Children = {
       {
         Type = "Button",
@@ -123,7 +125,7 @@ OnInitialise = function (self)
       local newItem = {
         X = 2,
         Y = i * 2 + offset,
-        Width = "100%,-2",
+        Width = "100%,-3",
         Height = 1,
         BackgroundColour = colors.transparent,
         TextColour = colors.lightGray,

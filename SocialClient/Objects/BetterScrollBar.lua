@@ -1,5 +1,5 @@
 BarColour = colors.gray
-BackgroundColour = colors.lightGray
+BackgroundColour = colors.transparent
 ScrollHeight = 10
 
 Scroll = 0
