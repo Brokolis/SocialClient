@@ -45,6 +45,34 @@ onView["posts_screen"] = function (menuView, contentView)
   contentView:GetObject("ShowTweetsButton").OnClick = function (self, event, b, x, y)
     SC.Posts.ShowPosts(contentView, "tweet")
   end
+
+  contentView:GetObject("NewPostButton").OnClick = function (self, event, b, x, y)
+    if SC.Posts.CheckLogin(contentView) then
+      menuView:SwitchContent("NewPostScreen")
+    end
+  end
+end
+
+onView["new_post_screen"] = function (menuView, contentView)
+  contentView:GetObject("CancelButton").OnClick = function (self, event, b, x, y)
+    menuView:SwitchContent("PostsScreen")
+  end
+
+  contentView:GetObject("PostButton").OnClick = function (self, event, b, x, y)
+    SC.Posts.NewPost(contentView, menuView)
+  end
+
+  contentView:GetObject("PostTypeDropDownList").OnUpdate = function (self, prop)
+    if prop == "SelectedOption" then
+      local selected = self.SelectedOption
+
+      if selected == 1 then
+        contentView:GetObject("MessageParameters").Y = 4
+      elseif selected == 2 then
+        contentView:GetObject("MessageParameters").Y = 1
+      end
+    end
+  end
 end
 
 onView["login_screen"] = function (menuView, contentView)
@@ -69,7 +97,7 @@ onView["login_screen"] = function (menuView, contentView)
       loginView.Visible = false
       logoutView.Visible = true
     end, function ()
-      program:DisplayAlertWindow("Failed to log in", "The username or password is incorrect.", {"OK"})
+      program:DisplayAlertWindow("Failed to log in", "The username or password was incorrect.", {"OK"})
 
       loginView.Visible = true
       logoutView.Visible = false

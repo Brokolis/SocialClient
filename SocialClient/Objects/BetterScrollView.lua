@@ -73,5 +73,9 @@ function UpdateScroll (self)
     scrollBar.Height = self.Height
   else
     self:RemoveObject(self.ScrollBarName)
+
+    if self.ChildOffset then
+      self.ChildOffset.Y = 0
+    end
   end
 end

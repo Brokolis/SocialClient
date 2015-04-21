@@ -5,9 +5,22 @@
   Children={
     {
       Type="Button",
+      Name="NewPostButton",
+      X=1,
+      Y=1,
+      Width="100%",
+      BackgroundColour="transparent",
+      TextColour="green",
+      ActiveBackgroundColour="transparent",
+      ActiveTextColour="lightGray",
+      Align="Left",
+      Text="+ Make new Post"
+    },
+    {
+      Type="Button",
       Name="ShowPostsButton",
       X=3,
-      Y=2,
+      Y=3,
       Width="50%,-4",
       Text="Posts"
     },
@@ -15,7 +28,7 @@
       Type="Button",
       Name="ShowTweetsButton",
       X="50%,2",
-      Y=2,
+      Y=3,
       Width="50%,-4",
       Text="Tweets"
     },
@@ -23,7 +36,7 @@
       Type="Label",
       Name="Loading",
       X=1,
-      Y=4,
+      Y=5,
       Width="100%",
       Align="Center",
       TextColour="lightGray",
@@ -34,7 +47,7 @@
       Type="Label",
       Name="NeedLogin",
       X=2,
-      Y=4,
+      Y=5,
       Width="100%,-2",
       Height="100%,-1",
       BackgroundColour="white",
@@ -46,9 +59,9 @@
       Type="BetterScrollView",
       Name="PostsView",
       X=1,
-      Y=4,
+      Y=5,
       Width="100%",
-      Height="100%,-3",
+      Height="100%,-4",
       BackgroundColour="white",
       Visible=false
     },

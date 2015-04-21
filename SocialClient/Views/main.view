@@ -15,6 +15,7 @@
       HeaderBackgroundColour="gray",
       ActiveContent="StartupScreen",
       Headers={
+        --// Menu Screens \\--
         ["LoginScreen"]="Login",
         ["StartupScreen"]="Startup Screen",
         ["MainScreen"]="Main - Social Client",
@@ -26,6 +27,9 @@
         ["AccountScreen"]="Social Account",
         ["SettingsScreen"]="App Settings",
         ["AboutScreen"]="About Social Client",
+
+        --// Other Screens \\--
+        ["NewPostScreen"]="Make New Post",
       },
       MenuItems={
         {
@@ -127,6 +131,7 @@
         "startup_screen",
         "main_screen",
         "posts_screen",
+        "new_post_screen",
       }
     }
   }

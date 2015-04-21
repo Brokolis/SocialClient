@@ -25,6 +25,11 @@ Posts.ShowPosts = function (view, postType)
 
   local ok, request = SocialNet.Posts.GetAllPosts(Account.Username, Account.Password)
 
+  if not ok then
+    ShowError(request)
+    return
+  end
+
   request.success = function (url, data, code, rawData)
     if not data.ok then
       ShowError(data.error)
@@ -96,6 +101,53 @@ Posts.ShowPosts = function (view, postType)
   request.done = function (url)
     postsView.Visible = true
     loading.Visible = false
+  end
+end
+
+Posts.NewPost = function (view, menuView)
+  if not Account.IsLoggedIn() then
+    return
+  end
+
+  local header = view:GetObject("HeaderTextBox").Text
+  local body = view:GetObject("BodyTextBox").Text
+  local postType = view:GetObject("PostTypeDropDownList").SelectedOption
+
+  view:GetObject("HeaderTextBox").Text = ""
+  view:GetObject("BodyTextBox").Text = ""
+  view:GetObject("PostTypeDropDownList").SelectedOption = 1
+
+  local function ShowError (msg)
+    program:DisplayAlertWindow("An error occurred", msg, {"OK"})
+  end
+
+  local ok, request
+  if postType == 1 then
+    ok, request = SocialNet.Posts.NewPost(Account.Username, Account.Password, header, body)
+  else
+    ok, request = SocialNet.Posts.NewTweet(Account.Username, Account.Password, body)
+  end
+
+  if not ok then
+    ShowError(request)
+    return
+  end
+
+  request.success = function (url, data, code, rawData)
+    if not data.ok then
+      ShowError(data.error)
+      return
+    end
+
+    menuView:SwitchContent("PostsScreen")
+  end
+
+  request.failure = function (url)
+    ShowError("Could not connect to the server.")
+  end
+
+  request.done = function (url)
+
   end
 end
 
