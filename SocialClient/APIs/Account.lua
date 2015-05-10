@@ -2,7 +2,7 @@ Username = nil
 Password = nil
 
 function Login (username, password, success, failure, done)
-  password = SocialNet.SecureHash(password)
+  password = SocialNet.ComputeHash(password)
 
   local ok, request = SocialNet.Users.Login(username, password)
 
@@ -50,7 +50,11 @@ function Logout ()
 end
 
 function IsLoggedIn ()
-  return Account.Username ~= nil and Account.Password ~= nil
+  return type(Account.Username) == "string" and type(Account.Password) == "string"
+end
+
+function IsLoggedInUser (username)
+  return Account.IsLoggedIn() and Account.Username:lower() == username:lower()
 end
 
 function CleanUp ()

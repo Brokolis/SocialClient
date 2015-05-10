@@ -4,19 +4,22 @@ function SetProgram (p)
   program = p
 end
 
+local function ShowError (msg)
+  program:DisplayAlertWindow("An error occurred", msg, {"OK"})
+end
+
 Posts = {}
 
-Posts.ShowPosts = function (view, postType)
-  if not Posts.CheckLogin(view) then
+Posts.ReloadPosts = true
+
+Posts.ShowPosts = function (view, menuView, postType)
+  if not Posts.CheckLogin(view) or not Posts.ReloadPosts then
+    Posts.ReloadPosts = true
     return
   end
 
   local postsView = view:GetObject("PostsView")
   local loading = view:GetObject("Loading")
-
-  local function ShowError (msg)
-    program:DisplayAlertWindow("An error occurred", msg, {"OK"})
-  end
 
   postsView:RemoveAllObjects()
 
@@ -88,6 +91,12 @@ Posts.ShowPosts = function (view, postType)
         newPost.Height = (isTweet and 2 or 3) + bodyHeight
 
         yOffset = yOffset + newPost.Height + 3
+
+        newPost.OnClick = function (self, event, b, x, y)
+          menuView:SwitchContent("ViewPostScreen")
+
+          Posts.ShowPost(view, menuView, post.ID)
+        end
       end
     end
 
@@ -104,6 +113,69 @@ Posts.ShowPosts = function (view, postType)
   end
 end
 
+Posts.ShowPost = function (view, menuView, postID)
+  local ok, request = SocialNet.Posts.GetAllPosts(Account.Username, Account.Password)
+
+  if not ok then
+    ShowError(request)
+    return
+  end
+
+  local viewPostScreen = menuView:GetContentView("ViewPostScreen")
+  local deleting = viewPostScreen:GetObject("Deleting")
+  local loading = viewPostScreen:GetObject("Loading")
+  local post = viewPostScreen:GetObject("Post")
+
+  loading.Visible = true
+  post.Visible = false
+
+  request.success = function (url, data, code, rawData)
+    if not data.ok then
+      ShowError(data.error)
+      menuView:SwitchContent("PostsScreen")
+
+      return
+    end
+
+    for i, post in ipairs(data.data) do
+      if post.ID == postID then
+        viewPostScreen:GetObject("PostID").PostID = postID
+
+        viewPostScreen:GetObject("PostAuthorAndDate").Text = "- " .. post.User .. " @ " .. post.DatePosted
+        viewPostScreen:GetObject("PostBody").Text = post.Body
+
+        if post.Type == "post" then
+          viewPostScreen:GetObject("PostHeader").Visible = true
+          viewPostScreen:GetObject("PostHeader").Text = post.Header
+
+          viewPostScreen:GetObject("PostData").Y = 5
+        else
+          viewPostScreen:GetObject("PostHeader").Visible = false
+
+          viewPostScreen:GetObject("PostData").Y = 4
+        end
+
+        if Account.IsLoggedInUser(post.User) then
+          viewPostScreen:GetObject("DeleteButton").Visible = true
+        else
+          viewPostScreen:GetObject("DeleteButton").Visible = false
+        end
+
+        break
+      end
+    end
+  end
+
+  request.failure = function (url)
+    ShowError("Could not connect to the server.")
+  end
+
+  request.done = function (url)
+    loading.Visible = false
+    post.Visible = true
+  end
+end
+
 Posts.NewPost = function (view, menuView)
   if not Account.IsLoggedIn() then
     return
@@ -116,10 +188,6 @@ Posts.NewPost = function (view, menuView)
   view:GetObject("HeaderTextBox").Text = ""
   view:GetObject("BodyTextBox").Text = ""
   view:GetObject("PostTypeDropDownList").SelectedOption = 1
-
-  local function ShowError (msg)
-    program:DisplayAlertWindow("An error occurred", msg, {"OK"})
-  end
 
   local ok, request
   if postType == 1 then

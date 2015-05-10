@@ -30,6 +30,7 @@
 
         --// Other Screens \\--
         ["NewPostScreen"]="Make New Post",
+        ["ViewPostScreen"]="View Post",
       },
       MenuItems={
         {
@@ -132,6 +133,7 @@
         "main_screen",
         "posts_screen",
         "new_post_screen",
+        "view_post_screen",
       }
     }
   }

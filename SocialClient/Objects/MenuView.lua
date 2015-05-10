@@ -290,6 +290,14 @@ function LoadContent (self, contentView)
   return true
 end
 
+function GetContentView (self, name)
+  for i, contentView in ipairs(self.ContentViews) do
+    if contentView.Name == name then
+      return contentView, i
+    end
+  end
+end
+
 function SetHeader (self, header)
   self.HeaderText = header
   self.Header:GetObject("HeaderLabel").Text = header

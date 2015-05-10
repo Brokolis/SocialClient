@@ -611,7 +611,7 @@ end
 --[[
     This function takes a string and returns its hash. Current hashing algorythm: sha256 by GravityScore.
 --]]
-SocialNet.SecureHash = function (plaintext)
+SocialNet.ComputeHash = function (plaintext)
   --  
   --  Adaptation of the Secure Hashing Algorithm (SHA-244/256)
   --  Found Here: http://lua-users.org/wiki/SecureHashAlgorithm

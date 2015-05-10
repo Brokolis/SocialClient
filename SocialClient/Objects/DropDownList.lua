@@ -98,5 +98,7 @@ function ToggleOpen (self, open)
     listScrollView:UpdateScroll()
 
     self._IsOpen = true
+    self.Bedrock:SetActiveObject(self)
+    self.Bedrock.CursorPos = nil
   end
 end
